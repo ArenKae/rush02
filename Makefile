@@ -17,27 +17,41 @@ HEADER = include/rush.h
 
 # Directories
 SRC_DIR = src/
+OBJ_DIR = obj/
 
 # Files
 SRC_FILES = rush02.c utils.c
 SRC = $(addprefix $(SRC_DIR), $(SRC_FILES))
+OBJ = $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
+
+LIBFT = ./libft/libft.a
 
 ### RULES ###
 
 all: $(NAME)
 
-# Creating the archive
-$(NAME):
-	@echo "$(YELLOW)Compiling $(NAME)... $(DEF_COLOR)"
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+$(LIBFT):
 	@$(MAKE) -C ./libft
-	@$(CC) $(CFLAGS) $(SRC) ./libft/libft.a -o $(NAME) 
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER) | $(OBJ_DIR)
+	@echo "$(YELLOW)Compiling: $< $(DEF_COLOR)"
+	@$(CC) $(CFLAGS) -I./include -I./libft/include -c $< -o $@
+
+$(NAME): $(OBJ) $(LIBFT)
+	@echo "$(YELLOW)Linking $(NAME)... $(DEF_COLOR)"
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 	@echo "$(CYAN)-> $(NAME) compiled.$(DEF_COLOR)"
 
 clean:
-	@rm -f $(NAME)
-	@echo "$(BLUE)-> $(NAME) executable cleaned!$(DEF_COLOR)"
+	@rm -rf $(OBJ_DIR)
+	@$(MAKE) clean -C ./libft
+	@echo "$(BLUE)-> $(NAME) object files cleaned.$(DEF_COLOR)"
 
 fclean: clean
+	@rm -f $(NAME)
 	@$(MAKE) fclean -C ./libft
 	@echo "$(RED)-> $(NAME) removed.$(DEF_COLOR)"
 

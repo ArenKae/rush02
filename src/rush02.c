@@ -83,32 +83,6 @@ char **split_input(char *input)
 	return tab;
 }
 
-void write_number(t_dict *dict, char **tab, int i, char *scales[], int spaces)
-{
-	int len = ft_strlen(tab[i]);
-	if (len == 1 || len == 2)
-	{
-		if (exact_match(tab[i], dict, false, 0))
-			;
-		else
-		{
-			under_100(tab[i], dict);
-		}
-	}
-	else if (len == 3)
-	{
-		exact_match(NULL, dict, false, tab[i][0]);
-		printf("%s ", scales[0]);
-		char cpy[3];
-		cpy[0] = tab[i][1];
-		cpy[1] = tab[i][2];
-		cpy[2] = '\0';
-		under_100(cpy, dict);
-	}
-	if (tab[i + 1])
-		printf("%s ", scales[spaces]);
-}
-
 char *trim_zeros(char *input, int size)
 {
 	if (input[0] != '0' || size == 1)
@@ -123,6 +97,40 @@ char *trim_zeros(char *input, int size)
 		input[j++] = input[i];
 	input[j] = '\0';
 	return input;
+}
+
+void write_number(t_dict *dict, char **tab, int i, char *scales[], int spaces)
+{
+	// Si le nombre est 000, on ne l'affiche pas
+	if (!ft_strncmp(tab[i], "000", 3))
+		return ;
+	char *input = tab[i];
+	input = trim_zeros(input, 3);
+	int len = ft_strlen(input);
+	if (len == 1 || len == 2)
+	{
+		if (exact_match(input, dict, false, 0))
+			;
+		else
+		{
+			under_100(input, dict);
+		}
+	}
+	else if (len == 3)
+	{
+		if (input[0] != '0')
+		{
+			exact_match(NULL, dict, false, tab[i][0]);
+			printf("%s ", scales[0]);
+		}
+		char cpy[3];
+		cpy[0] = input[1];
+		cpy[1] = input[2];
+		cpy[2] = '\0';
+		under_100(cpy, dict);
+	}
+	if (tab[i + 1])
+		printf("%s ", scales[spaces]);
 }
 
 void parse_input(char *input, t_dict *dict, char *scales[])
