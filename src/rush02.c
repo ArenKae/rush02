@@ -148,6 +148,7 @@ void parse_input(char *input, t_dict *dict, char *scales[])
 	else
 	{
 		input = trim_zeros(input, size);
+		size = ft_strlen(input); // Update size after trimming zeros
 		split_tab = split_input(input);
 		for (int i = 0; split_tab[i]; i++)
 			printf("%s ", split_tab[i]);
