@@ -6,7 +6,7 @@
 /*   By: acosi <acosi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 10:12:50 by acosi             #+#    #+#             */
-/*   Updated: 2025/03/21 18:32:06 by acosi            ###   ########.fr       */
+/*   Updated: 2026/03/24 18:21:50 by acosi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,17 @@ char	*extract_line(char *stash)
 	return (line);
 }
 
-/* A clean new stash is created without the caracters of the line that was just
+int	empty_stash(char *stash, int i)
+{
+	if (stash[i] == '\0')
+	{
+		free(stash);
+		return (1);
+	}
+	return (0);
+}
+
+/* A clean new stash is created without the characters of the line that was just
 read. This new stash is then assigned to the static stash for the next 
 get_next_line call. The old stash is freed to avoid leaks. */
 
@@ -89,18 +99,17 @@ char	*clean_stash(char *stash)
 	int		i;
 	int		j;
 
-	i = 0;
-	if (stash[i] == '\0')
-	{
-		free(stash);
+	if (!stash)
 		return (NULL);
-	}
+	i = 0;
 	while (stash[i] && stash[i] != '\n')
 		i++;
 	i += (stash[i] == '\n');
-	new_stash = malloc(sizeof(char) * (ft_strlen(stash) - i + 1));
-	if (!new_stash)
+	if (empty_stash(stash, i))
 		return (NULL);
+	new_stash = malloc(sizeof(char) * (ft_strlen(stash + i) + 1));
+	if (!new_stash)
+		return (free(stash), NULL);
 	j = 0;
 	while (stash[i + j])
 	{

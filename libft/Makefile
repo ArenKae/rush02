@@ -19,17 +19,21 @@ HEADER = include/libft.h
 # Directories
 SRC_DIR = src/
 GNL_DIR = gnl/
+PRINTF_DIR = printf/
 OBJ_DIR = obj/
 
 # Files
-SRC_FILES = ft_isdigit.c ft_isspace.c ft_strlen.c ft_strncmp.c ft_split.c
+SRC_FILES = ft_isdigit.c ft_isprint.c ft_isspace.c ft_strlen.c ft_strncmp.c ft_split.c
 GNL_FILES = get_next_line.c get_next_line_utils.c
+PRINTF_FILES = ft_printf.c ft_printf_functions.c ft_printf_num.c
 
 SRC = $(addprefix $(SRC_DIR), $(SRC_FILES))
 GNL_SRC = $(addprefix $(GNL_DIR), $(GNL_FILES))
+PRINTF_SRC = $(addprefix $(PRINTF_DIR), $(PRINTF_FILES))
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o)) \
-      $(addprefix $(OBJ_DIR), $(GNL_FILES:.c=.o))
+      $(addprefix $(OBJ_DIR), $(GNL_FILES:.c=.o)) \
+      $(addprefix $(OBJ_DIR), $(PRINTF_FILES:.c=.o))
 
 ### RULES ###
 
@@ -45,6 +49,11 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER) | $(OBJ_DIR)
 
 # Compiling get_next_line files
 $(OBJ_DIR)%.o: $(GNL_DIR)%.c $(GNL_DIR)get_next_line.h | $(OBJ_DIR)
+	@echo "$(YELLOW)..Compiling: $< $(DEF_COLOR)"
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+# Compiling ft_printf files
+$(OBJ_DIR)%.o: $(PRINTF_DIR)%.c $(PRINTF_DIR)ft_printf.h | $(OBJ_DIR)
 	@echo "$(YELLOW)..Compiling: $< $(DEF_COLOR)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 

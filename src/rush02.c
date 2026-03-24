@@ -1,5 +1,8 @@
 # include "../include/rush.h"
 
+// Check if the input number matches a key in the dictionary and print its value if it does. 
+// If newline is true, print a newline after the value, otherwise print a space. 
+// If c is -1 instead of 0, it means we are just checking if input is a match, and don't need to print anything.
 bool exact_match(char *input, t_dict *dict, bool newline, char c)
 {
 	if (!input)
@@ -15,9 +18,9 @@ bool exact_match(char *input, t_dict *dict, bool newline, char c)
 		if (!ft_strncmp(input, dict->key, ft_strlen(input) + 1))
 		{
 			if (newline && (c != -1))
-				printf("%s\n", dict->value);
+				ft_printf("%s\n", dict->value);
 			else if (c != -1)
-				printf("%s ", dict->value);
+				ft_printf("%s ", dict->value);
 			return (true);
 		}
 		dict = dict->next;
@@ -25,6 +28,9 @@ bool exact_match(char *input, t_dict *dict, bool newline, char c)
 	return (false);
 }
 
+// Print the input number as a combination of tens and units (for example, 42 = 40 + 2).
+// The tens and units arrays are indexed by the digit of the input 
+// (for example, tens[4] = "40" and units[2] = "2"), to get the correct value from the dictionary.
 void under_100(char *input, t_dict *dict)
 {
 	char *tens[] = {"20", "30", "40", "50", "60", "70", "80", "90"};
@@ -33,15 +39,17 @@ void under_100(char *input, t_dict *dict)
 	if (input[0] != '0')
 	{
 		if (!exact_match(tens[input[0] - '2'], dict, false, 0))
-			printf("Dict Error\n");
+			ft_printf("Dict Error\n");
 	}
 	if (input[1] != '0')
 	{
 		if (!exact_match(units[input[1] - '0'], dict, false, 0))
-			printf("Dict Error\n");
+			ft_printf("Dict Error\n");
 	}
 }
 
+// Count the number of spaces needed to split the input number into groups of 
+// 3 digits (for example, 1234567 = 1 234 567).
 int count_spaces(int size)
 {
 	if (size % 3 == 0)
@@ -50,6 +58,7 @@ int count_spaces(int size)
 		return ((size / 3));
 }
 
+// Split the input number into groups of 3 digits, starting from the right.
 char **split_input(char *input)
 {
 	int i, j, count;
@@ -83,6 +92,8 @@ char **split_input(char *input)
 	return tab;
 }
 
+// Trim leading zeros from the input number to avoid printing scales 
+// for empty groups (for example, 000 = 0, 0001 = 1).
 char *trim_zeros(char *input, int size)
 {
 	if (input[0] != '0' || size == 1)
@@ -99,9 +110,10 @@ char *trim_zeros(char *input, int size)
 	return input;
 }
 
+//Write the current group of 3 digits with the correct scale (thousand, million, billion, etc.).
 void write_number(t_dict *dict, char **tab, int i, char *scales[], int spaces)
 {
-	// Si le nombre est 000, on ne l'affiche pas
+	// If the current group of digits is only zeros, don't print anything
 	if (!ft_strncmp(tab[i], "000", 3))
 		return ;
 	char *input = tab[i];
@@ -112,16 +124,14 @@ void write_number(t_dict *dict, char **tab, int i, char *scales[], int spaces)
 		if (exact_match(input, dict, false, 0))
 			;
 		else
-		{
 			under_100(input, dict);
-		}
 	}
 	else if (len == 3)
 	{
 		if (input[0] != '0')
 		{
 			exact_match(NULL, dict, false, tab[i][0]);
-			printf("%s ", scales[0]);
+			ft_printf("%s ", scales[0]); // scales[0] = "hundred"
 		}
 		char cpy[3];
 		cpy[0] = input[1];
@@ -129,34 +139,40 @@ void write_number(t_dict *dict, char **tab, int i, char *scales[], int spaces)
 		cpy[2] = '\0';
 		under_100(cpy, dict);
 	}
+	// If the current group of digits is not the last one, print the scale.
 	if (tab[i + 1])
-		printf("%s ", scales[spaces]);
+		ft_printf("%s ", scales[spaces]);
 }
 
+// Parse the input number and print it in words using the dictionary and the scales.
 void parse_input(char *input, t_dict *dict, char *scales[])
 {
 	int size = ft_strlen(input);
 	char **split_tab;
 
+	// If the number is less than 100, we can directly print it using the dictionary.
 	if (size < 3)
 	{
+		// If no exact match is found, we try to print it as a number under 100 (for example, 42 = 40 + 2).
 		if (!exact_match(input, dict, true, 0))
 			under_100(input, dict);
-		printf("\n");
+		ft_printf("\n");
 		return ;
 	}
 	else
 	{
-		input = trim_zeros(input, size);
+		// For numbers greater than or equal to 100, we split the input into groups of 3 digits, 
+		// and print each group with the correct scale (thousand, million, billion, etc.).
+		input = trim_zeros(input, size); // Trim leading zeros to avoid printing scales for empty groups
 		size = ft_strlen(input); // Update size after trimming zeros
-		split_tab = split_input(input);
+		split_tab = split_input(input); // Split the input into groups of 3 digits
 		for (int i = 0; split_tab[i]; i++)
-			printf("%s ", split_tab[i]);
-		printf("\n");
-		int spaces = count_spaces(size);
+			ft_printf("%s ", split_tab[i]);
+		ft_printf("\n");
+		int spaces = count_spaces(size); // The number of spaces gives us the index of the scale array for each group of 3 digits
 		for (int i = 0; split_tab[i]; i++)
-			write_number(dict, split_tab, i, scales, spaces--);
-		printf("\n");
+			write_number(dict, split_tab, i, scales, spaces--); // scales is decremented every time to get the correct scale (thousand, million, billion, etc.)
+		ft_printf("\n");
 
 		// Leaks
 		for (int i = 0; split_tab[i]; i++)
@@ -166,6 +182,7 @@ void parse_input(char *input, t_dict *dict, char *scales[])
 	}
 }
 
+// Check if the key is a scale (thousand, million, billion, etc.) and return its index in the scales array, or -1 if it's not a scale.
 int get_scale_index(const char *key)
 {
 	int i = 1;
@@ -181,13 +198,15 @@ int get_scale_index(const char *key)
 		count_zeros++;
 		i++;
 	}
+	// A scale must have a number of zeros that is a multiple of 3, and at least 3 (thousand).
 	if (count_zeros % 3 != 0 || count_zeros < 3)
 		return (-1);
 
+	// The index of the scale in the array is the number of groups of 3 zeros it has (thousand = 1, million = 2, billion = 3, etc.).
 	return (count_zeros / 3);
 }
 
-
+// Parse the dictionary and store the values of the scales (thousand, million, billion, etc.) in an array for easy access later.
 void parse_dict(t_dict *dict, char *scales[])
 {
 	int i = 0;
@@ -207,65 +226,67 @@ int check_errors(int ac, char **av)
 {
 	char *input;
 	if (ac < 2 || ac > 3)
-	{
-		printf("Error\n");
 		return (1);
-	}
 	if (ac == 2)
 		input = av[1];
 	else
 		input = av[2];
 	for (int i = 0; input[i]; i++)
 		if (!ft_isdigit(input[i]))
-		{
-			printf("Error\n");
 			return (1);
-		}
 	return (0);
 }
 
 int	main(int ac, char **av)
 {
-	int		fd;
+	if (check_errors(ac, av))
+		return (exit_error(ERROR));
+
+	int fd;
+	char *file;
+	char *input;
+	if (ac == 3)
+		file = av[1], input = av[2];
+	else
+		file = "numbers.dict", input = av[1];
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+		return (exit_error(ERROR));
+
+	// Read the dictionary and store each line in a linked list
 	char	*buffer;
-	char	**scales;
 	t_dict	*dict = NULL;
 	t_dict	*new_node;
-
-	if (check_errors(ac, av))
-		return (EXIT_FAILURE);
-
-	scales = malloc(sizeof(char *) * 32);
-	if (scales == NULL)
-		return (EXIT_FAILURE);
-	scales[0] = "";
-
-	fd = open("numbers.dict", O_RDONLY);
-	if (fd == -1)
-		return (EXIT_FAILURE);
-
 	while ((buffer = get_next_line(fd)))
 	{
+		// Skip empty lines
 		if (buffer[0] == '\n')
 		{
 			free(buffer);
 			continue ;
 		}
-
+		// Each line = 1 node
 		new_node = new_dict_node(buffer);
 		free(buffer);
 		if (!new_node)
 		{
 			ft_free(dict);
 			close(fd);
-			return (1);
+			return (exit_error(DICT_ERROR));
 		}
 		new_node->next = dict;
 		dict = new_node;
 	}
 
+	// Create an array to store the scales (thousand, million, billion, etc.)
+	char	**scales;
+	scales = malloc(sizeof(char *) * 32);
+	if (scales == NULL)
+		return (exit_error(ERROR));
+	scales[0] = "";
+
 	parse_dict(dict, scales);
-	parse_input(av[1], dict, scales);
+	parse_input(input, dict, scales);
 
 	ft_free(dict);
 	free(scales);
