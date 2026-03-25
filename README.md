@@ -37,11 +37,11 @@ Clone the repository and navigate to the directory corresponding to the desired 
 make
 
 Run the program:
-```
+```bash
 ./rush02 [number]
 ```
 ### Examples
-```
+```bash
 ./rush02 42
 > 42
 > forty two  
@@ -58,6 +58,6 @@ Run the program:
 The program relies on an external dictionary file mapping numeric values to their written equivalents.
 
 To use a custom dictionary:
-```
+```bash
 ./rush02 [dictionary_file] [number]
 ```
