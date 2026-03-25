@@ -5,9 +5,9 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdbool.h>
-# include "../../libft/include/libft.h"
-# include "../../libft/gnl/get_next_line.h"
-# include "../../libft/printf/ft_printf.h"
+# include "../libft/include/libft.h"
+# include "../libft/gnl/get_next_line.h"
+# include "../libft/printf/ft_printf.h"
 
 # define ERROR 1
 # define DICT_ERROR -1

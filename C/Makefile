@@ -24,7 +24,7 @@ SRC_FILES = rush02.c utils.c
 SRC = $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
 
-LIBFT = ../libft/libft.a
+LIBFT = ./libft/libft.a
 
 ### RULES ###
 
@@ -34,7 +34,7 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 $(LIBFT):
-	@$(MAKE) -C ../libft
+	@$(MAKE) -C ./libft
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER) | $(OBJ_DIR)
 	@echo "$(YELLOW)Compiling: $< $(DEF_COLOR)"
@@ -47,12 +47,12 @@ $(NAME): $(OBJ) $(LIBFT)
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@$(MAKE) clean -C ../libft
+	@$(MAKE) clean -C ./libft
 	@echo "$(BLUE)-> $(NAME) object files cleaned.$(DEF_COLOR)"
 
 fclean: clean
 	@rm -f $(NAME)
-	@$(MAKE) fclean -C ../libft
+	@$(MAKE) fclean -C ./libft
 	@echo "$(RED)-> $(NAME) removed.$(DEF_COLOR)"
 
 re: fclean all
