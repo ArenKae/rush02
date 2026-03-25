@@ -1,26 +1,27 @@
 # include "../include/rush.h"
 
 // Check if the input number matches a key in the dictionary and print its value if it does. 
-// If newline is true, print a newline after the value, otherwise print a space. 
+// If newline is 1, print a \n after the value. If it's 0, print a space. If its -1, print nothing. 
 // If c is -1 instead of 0, it means we are just checking if input is a match, and don't need to print anything.
-bool exact_match(char *input, t_dict *dict, bool newline, char c)
+bool exact_match(char *input, t_dict *dict, int newline, char c)
 {
+	char str[2];
 	if (!input)
 	{
-		char str[2];
 		str[0] = c;
 		str[1] = '\0';
 		input = str;
 	}
-
 	while (dict != NULL)
 	{
 		if (!ft_strncmp(input, dict->key, ft_strlen(input) + 1))
 		{
-			if (newline && (c != -1))
+			if (newline == 1 && (c != -1))
 				ft_printf("%s\n", dict->value);
-			else if (c != -1)
+			else if (newline == 0 && (c != -1))
 				ft_printf("%s ", dict->value);
+			else if (newline == -1 && (c != -1))
+				ft_printf("%s", dict->value);
 			return (true);
 		}
 		dict = dict->next;
@@ -35,15 +36,14 @@ void under_100(char *input, t_dict *dict)
 {
 	char *tens[] = {"20", "30", "40", "50", "60", "70", "80", "90"};
 	char *units[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-
 	if (input[0] != '0')
 	{
-		if (!exact_match(tens[input[0] - '2'], dict, false, 0))
+		if (!exact_match(tens[input[0] - '2'], dict, 0, 0))
 			ft_printf("Dict Error\n");
 	}
 	if (input[1] != '0')
 	{
-		if (!exact_match(units[input[1] - '0'], dict, false, 0))
+		if (!exact_match(units[input[1] - '0'], dict, 0, 0))
 			ft_printf("Dict Error\n");
 	}
 }
@@ -116,26 +116,26 @@ void write_number(t_dict *dict, char **tab, int i, char *scales[], int spaces)
 	// If the current group of digits is only zeros, don't print anything
 	if (!ft_strncmp(tab[i], "000", 3))
 		return ;
-	char *input = tab[i];
-	input = trim_zeros(input, 3);
-	int len = ft_strlen(input);
+	char *num = tab[i];
+	num = trim_zeros(num, 3);
+	int len = ft_strlen(num);
 	if (len == 1 || len == 2)
 	{
-		if (exact_match(input, dict, false, 0))
+		if (exact_match(num, dict, 0, 0))
 			;
 		else
-			under_100(input, dict);
+			under_100(num, dict);
 	}
 	else if (len == 3)
 	{
-		if (input[0] != '0')
+		if (num[0] != '0')
 		{
-			exact_match(NULL, dict, false, tab[i][0]);
+			exact_match(NULL, dict, 0, num[0]);
 			ft_printf("%s ", scales[0]); // scales[0] = "hundred"
 		}
 		char cpy[3];
-		cpy[0] = input[1];
-		cpy[1] = input[2];
+		cpy[0] = num[1];
+		cpy[1] = num[2];
 		cpy[2] = '\0';
 		under_100(cpy, dict);
 	}
@@ -153,10 +153,13 @@ void parse_input(char *input, t_dict *dict, char *scales[])
 	// If the number is less than 100, we can directly print it using the dictionary.
 	if (size < 3)
 	{
+		ft_printf("%s\n", input);
 		// If no exact match is found, we try to print it as a number under 100 (for example, 42 = 40 + 2).
-		if (!exact_match(input, dict, true, 0))
+		if (!exact_match(input, dict, 1, 0))
+		{
 			under_100(input, dict);
-		ft_printf("\n");
+			ft_printf("\n");
+		}
 		return ;
 	}
 	else
@@ -213,7 +216,7 @@ void parse_dict(t_dict *dict, char *scales[])
 
 	while (dict != NULL)
 	{
-		if (exact_match("100", dict, true, -1))
+		if (exact_match("100", dict, -1, -1))
 				scales[0] = dict->value;
 
 		if ((i = get_scale_index(dict->key)) >= 1)
@@ -248,7 +251,7 @@ int	main(int ac, char **av)
 	if (ac == 3)
 		file = av[1], input = av[2];
 	else
-		file = "numbers.dict", input = av[1];
+		file = "../numbers.dict", input = av[1];
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		return (exit_error(ERROR));
