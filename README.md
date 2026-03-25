@@ -47,7 +47,7 @@ Run the program:
 > forty two  
   
 ./rush02 2147483647
-2 147 483 647
+> 2 147 483 647
 > two billion one hundred forty seven million four hundred eighty three thousand six hundred forty seven
 ```
 > [!NOTE]  
