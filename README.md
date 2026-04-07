@@ -33,9 +33,9 @@ This version was rewritten independently as a personal exercise.
 ## Usage
 
 Clone the repository and navigate to the directory corresponding to the desired language, then compile:
-
+```bash
 make
-
+```
 Run the program:
 ```bash
 ./rush02 [number]
