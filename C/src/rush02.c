@@ -5,8 +5,6 @@
 // If c is -1 instead of 0, it means we are just checking if input is a match, and don't need to print anything.
 bool exact_match(char *input, t_dict *dict, int newline, char c)
 {
-	if (!input)
-		return (false);
 	while (dict != NULL)
 	{
 		if (!ft_strncmp(input, dict->key, ft_strlen(input) + 1))
