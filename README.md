@@ -28,7 +28,7 @@ This version was rewritten independently as a personal exercise.
     These are not available during the actual Piscine, where everything must be implemented from scratch.
     
 -   This implementation does **not comply with the [42 Norm](https://github.com/MagicHatJo/-42-Norm/blob/master/norme.en.pdf)**.
--   A **C++ version** is also included, mainly to revisit the language, but also to illustrate how much simpler the problem becomes with access to the standard library
+-   A **C++ version** is also included, mainly to revisit the language, but also to illustrate how much simpler the problem becomes with access to the standard library.
 
 ## Usage
 
