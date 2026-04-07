@@ -5,13 +5,8 @@
 // If c is -1 instead of 0, it means we are just checking if input is a match, and don't need to print anything.
 bool exact_match(char *input, t_dict *dict, int newline, char c)
 {
-	char str[2];
 	if (!input)
-	{
-		str[0] = c;
-		str[1] = '\0';
-		input = str;
-	}
+		return (false);
 	while (dict != NULL)
 	{
 		if (!ft_strncmp(input, dict->key, ft_strlen(input) + 1))
@@ -130,7 +125,12 @@ void write_number(t_dict *dict, char **tab, int i, char *scales[], int spaces)
 	{
 		if (num[0] != '0')
 		{
-			exact_match(NULL, dict, 0, num[0]);
+			// Isolate the first digit of the current group and perform a dictionary lookup
+			// for the hundreds place (ex: 100 = one + hundred)
+			char digit[2];
+			digit[0] = num[0];
+			digit[1] = '\0';
+			exact_match(digit, dict, 0, 0);
 			ft_printf("%s ", scales[0]); // scales[0] = "hundred"
 		}
 		char cpy[3];
