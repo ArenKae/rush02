@@ -10,17 +10,17 @@ CYAN = \033[0;96m
 WHITE = \033[0;97m
 
 ### VARIABLES ###
-CC = gcc
+CC = c++
 CFLAGS = -Wall -Wextra -Werror
 NAME = rush02
-HEADER = include/rush.h
+HEADER = rush02.hpp
 
 # Directories
 SRC_DIR = src/
 OBJ_DIR = obj/
 
 # Files
-SRC_FILES = rush02.c utils.c
+SRC_FILES = rush02.cpp utils.cpp
 SRC = $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
 
