@@ -52,7 +52,8 @@ int	check_dict_errors(char **split)
 	}
 
 	// Check if the key is a number
-	for (int j = 0; split[0][j]; ++j)
+	char *cpy = ft_trim(split[0]);
+	for (int j = 0; cpy[j]; ++j)
 	{
 		if (!ft_isdigit(split[0][j]))
 		{
