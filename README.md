@@ -51,7 +51,7 @@ Run the program:
 > two billion one hundred forty seven million four hundred eighty three thousand six hundred forty seven
 ```
 > [!NOTE]  
-> The input must be a **positive integer**, without separators.
+> The input number must be a **positive integer**, without separators.
 
 ## Dictionary Support
 
