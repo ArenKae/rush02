@@ -1,4 +1,4 @@
-# include "../include/rush.h"
+# include "../include/rush02.h"
 
 // Check if the input number matches a key in the dictionary and print its value if it does. 
 // If newline is 1, print a \n after the value. If it's 0, print a space. If its -1, print nothing. 

@@ -13,7 +13,7 @@ WHITE = \033[0;97m
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 NAME = rush02
-HEADER = include/rush.h
+HEADER = include/rush02.h
 
 # Directories
 SRC_DIR = src/

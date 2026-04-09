@@ -1,4 +1,4 @@
-#include "../include/rush.h"
+#include "../include/rush02.h"
 
 // Trim a string of any leading or trailing spaces.
 char	*ft_trim(char *str)

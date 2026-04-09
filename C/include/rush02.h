@@ -22,6 +22,6 @@ typedef struct	s_dict
 char	*ft_trim(char *str);
 t_dict	*new_dict_node(char *buffer);
 void	ft_free(t_dict *dict);
-int		exit_error();
+int		exit_error(int code);
 
 #endif
