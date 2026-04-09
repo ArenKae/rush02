@@ -114,10 +114,13 @@ void write_number(t_dict *dict, char **tab, int i, char *scales[], int spaces)
 	int len = ft_strlen(num);
 	if (len == 1 || len == 2)
 	{
-		if (exact_match(num, dict, 0, 0))
-			;
-		else
-			under_100(num, dict);
+		if (is_base_under_100(num))
+		{
+			if (exact_match(num, dict, 0, 0))
+				;
+			else
+				under_100(num, dict);
+		}
 	}
 	else if (len == 3)
 	{
@@ -153,7 +156,12 @@ void parse_input(char *input, t_dict *dict, char *scales[])
 	{
 		ft_printf("%s\n", input);
 		// If no exact match is found, we try to print it as a number under 100 (for example, 42 = 40 + 2).
-		if (!exact_match(input, dict, 1, 0))
+		if (is_base_under_100(input))
+		{
+			if (!exact_match(input, dict, 1, 0))
+				ft_printf("Dict Error\n");
+		}
+		else
 		{
 			under_100(input, dict);
 			ft_printf("\n");

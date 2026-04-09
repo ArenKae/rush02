@@ -1,5 +1,31 @@
 #include "../include/rush02.h"
 
+// For numbers under 100, check if it is an "initial entry" from the original dictionary.
+// Prevent arbitrary additionnal entries to take over the parsing logic if an exact match is found.
+// Ex: if the dictionary adds the entry "54: fifty-four", the program must still use the initial 
+// entries "50: fifty" and "4: four" to write the number.
+// The initial entries are :
+//   - 0 to 19
+//   - exact tens: 20, 30,..., 90
+//   - 100
+//   - powers of 1000
+bool	is_base_under_100(char *num)
+{
+	int	len;
+
+	len = ft_strlen(num);
+	if (len == 1)
+		return (true);
+	if (len == 2)
+	{
+		if (num[0] == '1')
+			return (true);
+		if (num[1] == '0' && num[0] >= '2' && num[0] <= '9')
+			return (true);
+	}
+	return (false);
+}
+
 // Trim a string of any leading or trailing spaces.
 char	*ft_trim(char *str)
 {

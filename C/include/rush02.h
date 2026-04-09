@@ -19,6 +19,7 @@ typedef struct	s_dict
 	struct s_dict	*next;
 }				t_dict;
 
+bool	is_base_under_100(char *num);
 char	*ft_trim(char *str);
 t_dict	*new_dict_node(char *buffer);
 void	ft_free(t_dict *dict);
