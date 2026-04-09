@@ -1,4 +1,4 @@
-#include "./rush02.hpp"
+#include "../rush02.hpp"
 
 // Print the correct error code before exiting the program.
 int exit_error(int code)

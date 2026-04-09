@@ -22,9 +22,7 @@ OBJ_DIR = obj/
 # Files
 SRC_FILES = rush02.cpp utils.cpp
 SRC = $(addprefix $(SRC_DIR), $(SRC_FILES))
-OBJ = $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
-
-LIBFT = ../libft/libft.a
+OBJ = $(addprefix $(OBJ_DIR), $(SRC_FILES:.cpp=.o))
 
 ### RULES ###
 
@@ -33,16 +31,14 @@ all: $(NAME)
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
-$(LIBFT):
-	@$(MAKE) -C ../libft
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER) | $(OBJ_DIR)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp $(HEADER) | $(OBJ_DIR)
 	@echo "$(YELLOW)Compiling: $< $(DEF_COLOR)"
-	@$(CC) $(CFLAGS) -I./include -I./libft/include -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJ) $(LIBFT)
+$(NAME): $(OBJ)
 	@echo "$(YELLOW)Linking $(NAME)... $(DEF_COLOR)"
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 	@echo "$(CYAN)-> $(NAME) compiled.$(DEF_COLOR)"
 
 clean:

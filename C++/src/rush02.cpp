@@ -1,4 +1,4 @@
-#include "./rush02.hpp"
+#include "../rush02.hpp"
 
 int check_errors(int ac, char **av)
 {
