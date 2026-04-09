@@ -3,6 +3,11 @@
 
 #include <iostream>
 #include <cstring>
+#include <fstream>
+#include <sstream>
+#include <cctype>
+#include <stdexcept>
+#include <map>
 
 # define ERROR 1
 # define DICT_ERROR -1
@@ -15,7 +20,12 @@
 #define CYAN "\033[36m"
 #define RESET "\033[0m"
 
-int		exit_error(int code);
+typedef std::map<std::string, std::string> DictMap;
+
+DictMap		init_dict(std::ifstream &file);
+std::string trim(std::string str);
+bool 		is_digits(const std::string &s);
+int			exit_error();
 
 
 #endif

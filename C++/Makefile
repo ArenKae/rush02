@@ -43,12 +43,10 @@ $(NAME): $(OBJ)
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@$(MAKE) clean -C ../libft
 	@echo "$(BLUE)-> $(NAME) object files cleaned.$(DEF_COLOR)"
 
 fclean: clean
 	@rm -f $(NAME)
-	@$(MAKE) fclean -C ../libft
 	@echo "$(RED)-> $(NAME) removed.$(DEF_COLOR)"
 
 re: fclean all
